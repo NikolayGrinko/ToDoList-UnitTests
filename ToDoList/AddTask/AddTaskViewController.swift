@@ -19,7 +19,7 @@ class AddTaskViewController: UIViewController, AddTaskViewProtocol {
     private let userIdTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .roundedRect
-        textField.placeholder = "Введите User ID"
+        textField.placeholder = "Введите User ID - цифры"
         textField.keyboardType = .numberPad
         return textField
     }()
