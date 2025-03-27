@@ -1,0 +1,33 @@
+{
+  "configurations" : [
+    {
+      "id" : "8FF80325-1C32-4285-9657-AE653B19E4CC",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "selectedTags" : {
+        "includeXCTests" : true
+      },
+      "skippedTags" : {
+        "tags" : [
+          ".ToDoListTests"
+        ]
+      },
+      "target" : {
+        "containerPath" : "container:ToDoList.xcodeproj",
+        "identifier" : "20B00C4B2D92F5000006CD3E",
+        "name" : "ToDoListTests"
+      }
+    }
+  ],
+  "version" : 1
+}

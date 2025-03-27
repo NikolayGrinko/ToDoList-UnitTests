@@ -1,0 +1,115 @@
+{
+  "" : {
+    "const-values" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoList-master.swiftconstvalues",
+    "dependencies" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoList-master.d",
+    "diagnostics" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoList-master.dia",
+    "emit-module-dependencies" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoList-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoList-master-emit-module.dia",
+    "swift-dependencies" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoList-master.swiftdeps"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/AddTask/AddTaskInteractor.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskInteractor.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskInteractor.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskInteractor.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/AddTask/AddTaskPresenter.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskPresenter.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskPresenter.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskPresenter.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/AddTask/AddTaskRouter.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskRouter.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskRouter.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskRouter.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/AddTask/AddTaskViewController.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskViewController.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskViewController.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AddTaskViewController.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/ApiRequests/APIService.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/APIService.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/APIService.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/APIService.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/Cell/TaskCell.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskCell.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskCell.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskCell.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/CoreDataRequests/CoreDataService.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/CoreDataService.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/CoreDataService.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/CoreDataService.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/DetailsVC/TaskDetailViewController.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskDetailViewController.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskDetailViewController.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskDetailViewController.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/Model/TaskEntity.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskEntity.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskEntity.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskEntity.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/Model/TodoItem.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TodoItem.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TodoItem.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TodoItem.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/Settings/AppDelegate.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AppDelegate.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AppDelegate.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/AppDelegate.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/Settings/SceneDelegate.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/SceneDelegate.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/SceneDelegate.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/SceneDelegate.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/Settings/ToDoEntity.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoEntity.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoEntity.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoEntity.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/TaskList/TaskListInteractor.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListInteractor.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListInteractor.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListInteractor.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/TaskList/TaskListPresenter.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListPresenter.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListPresenter.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListPresenter.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/TaskList/TaskListRouter.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListRouter.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListRouter.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListRouter.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/ToDoList/TaskList/TaskListView.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListView.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListView.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/TaskListView.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/DerivedSources/CoreDataGenerated/ToDoList/Task+CoreDataClass.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/Task+CoreDataClass.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/Task+CoreDataClass.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/Task+CoreDataClass.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/DerivedSources/CoreDataGenerated/ToDoList/Task+CoreDataProperties.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/Task+CoreDataProperties.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/Task+CoreDataProperties.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/Task+CoreDataProperties.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/DerivedSources/CoreDataGenerated/ToDoList/ToDoList+CoreDataModel.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoList+CoreDataModel.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoList+CoreDataModel.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/ToDoList+CoreDataModel.o"
+  },
+  "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/nikolajgrinko/Desktop/ToDoList/Основная/build/ToDoList.build/Release-iphoneos/ToDoList.build/Objects-normal/arm64/GeneratedAssetSymbols.o"
+  }
+}
