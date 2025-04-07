@@ -8,35 +8,43 @@
 import Foundation
 
 protocol TaskListInteractorProtocol {
-    func loadTasks()
-    func deleteTask(_ task: TaskEntity)
+    func fetchTasks()
     func updateTask(_ task: TaskEntity)
+    func deleteTask(_ task: TaskEntity)
 }
 
 class TaskListInteractor: TaskListInteractorProtocol {
-    var presenter: TaskListPresenterProtocol?
-    let apiService = APIService()
-    let coreDataService = CoreDataService()
+    weak var presenter: TaskListPresenterProtocol?
+    private let apiService: APIService
+    private let coreDataService: CoreDataService
     
+    init(apiService: APIService = APIService(),
+         coreDataService: CoreDataService = CoreDataService.shared) {
+        self.apiService = apiService
+        self.coreDataService = coreDataService
+    }
     
-    func loadTasks() {
+    func fetchTasks() {
         print("📡 Interactor: загружаем задачи из CoreData...")
         
-        var localTasks = CoreDataService.shared.fetchTasks() // ✅ Загружаем из CoreData
+        var localTasks = coreDataService.fetchTasks()
         print("✅ Из CoreData загружено: \(localTasks.count) задач")
         
-        // Загружаем API-данные и объединяем с локальными задачами
-        apiService.fetchTasks { result in
+        apiService.fetchTasks { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiTasks):
                 print("✅ Из API загружено: \(apiTasks.count) задач")
                 
-                // Убираем дубликаты (если такая задача уже есть в CoreData)
                 let apiTasksFiltered = apiTasks.filter { apiTask in
                     !localTasks.contains { $0.id == apiTask.id }
                 }
                 
-                // Добавляем API-данные к локальным
+                apiTasksFiltered.forEach { task in
+                    self.coreDataService.saveTask(task)
+                }
+                
                 localTasks.append(contentsOf: apiTasksFiltered)
                 
                 DispatchQueue.main.async {
@@ -46,7 +54,6 @@ class TaskListInteractor: TaskListInteractorProtocol {
             case .failure(let error):
                 print("❌ Ошибка загрузки из API: \(error.localizedDescription)")
                 
-                // Если API не работает, показываем только локальные данные
                 DispatchQueue.main.async {
                     self.presenter?.didLoadTasks(localTasks)
                 }
@@ -56,12 +63,11 @@ class TaskListInteractor: TaskListInteractorProtocol {
     
     func deleteTask(_ task: TaskEntity) {
         coreDataService.deleteTask(task)
-        loadTasks() // 🔥 Перезагружаем список
+        fetchTasks()
     }
     
     func updateTask(_ task: TaskEntity) {
-        CoreDataService.shared.updateTask(task) // ✅ Сохраняем в CoreData
-        loadTasks() // ✅ Перезагружаем список
-        
+        coreDataService.updateTask(task)
+        fetchTasks()
     }
 }

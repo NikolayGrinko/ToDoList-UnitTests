@@ -7,33 +7,38 @@
 
 import Foundation
 
-protocol TaskListPresenterProtocol {
-    func loadTasks()
-    func didLoadTasks(_ tasks: [TaskEntity])
+// Обновляем протокол с необходимыми методами
+protocol TaskListPresenterProtocol: AnyObject {
+    func viewDidLoad()
+    func fetchTasks()
     func deleteTask(_ task: TaskEntity)
-    func updateTask(_ task: TaskEntity)
+    func toggleTaskCompletion(_ task: TaskEntity)
+    func didLoadTasks(_ tasks: [TaskEntity])
 }
 
 class TaskListPresenter: TaskListPresenterProtocol {
     weak var view: TaskListViewProtocol?
     var interactor: TaskListInteractorProtocol?
     
-    func loadTasks() {
-        print("📡 Presenter: вызываем interactor.loadTasks()")
-        interactor?.loadTasks()
+    func viewDidLoad() {
+        fetchTasks()
+    }
+    
+    func fetchTasks() {
+        interactor?.fetchTasks()
     }
     
     func didLoadTasks(_ tasks: [TaskEntity]) {
-        print("✅ Presenter получил задачи: \(tasks.count)")
-        view?.showTasks(tasks) // 🔥 Передаём данные в View
+        view?.showTasks(tasks)
     }
     
+    func toggleTaskCompletion(_ task: TaskEntity) {
+        var updatedTask = task
+        updatedTask.completed = !task.completed
+        interactor?.updateTask(updatedTask)
+    }
     
     func deleteTask(_ task: TaskEntity) {
         interactor?.deleteTask(task)
-    }
-    
-    func updateTask(_ task: TaskEntity) {
-        interactor?.updateTask(task)  // ✅ Передаём обновление в Interactor
     }
 }

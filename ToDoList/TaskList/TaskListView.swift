@@ -8,172 +8,185 @@
 import UIKit
 
 protocol TaskListViewProtocol: AnyObject {
+    var presenter: TaskListPresenterProtocol? { get set }
     func showTasks(_ tasks: [TaskEntity])
 }
 
 class TaskListView: UIViewController, TaskListViewProtocol {
     
-    private var tasks: [TaskEntity] = []        // ✅ Полный список задач
-    private var filteredTasks: [TaskEntity] = [] // ✅ Отфильтрованные задачи
-    private var isSearching = false             // ✅ Флаг поиска
-    private let tableView = UITableView()
-    private let searchController = UISearchController(searchResultsController: nil)
-    private let addButton = UIButton() // ✅ Кнопка для добавления задачи
-    
+    // MARK: - Properties
     var presenter: TaskListPresenterProtocol?
+    private var tasks: [TaskEntity] = []        // Полный список задач
+    private var filteredTasks: [TaskEntity] = [] // Отфильтрованные задачи
+    private var isSearching = false             // Флаг поиска
     
-    private let taskCountLabel: UILabel = { // ✅ Добавляем label для количества задач
+    // MARK: - UI Components
+    private lazy var tableView: UITableView = {
+        let table = UITableView()
+        table.delegate = self
+        table.dataSource = self
+        table.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
+        table.rowHeight = UITableView.automaticDimension
+        table.translatesAutoresizingMaskIntoConstraints = false
+        return table
+    }()
+    
+    private lazy var searchController: UISearchController = {
+        let controller = UISearchController(searchResultsController: nil)
+        controller.searchResultsUpdater = self
+        controller.obscuresBackgroundDuringPresentation = false
+        controller.searchBar.placeholder = "Поиск задач..."
+        return controller
+    }()
+    
+    private let taskCountLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .medium)
         label.textAlignment = .center
         label.textColor = .darkGray
         label.text = "Задач: 0"
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
-        tableView.rowHeight = UITableView.automaticDimension // ✅ Авто-высота
         setupUI()
-        setupLongPressGesture() // ✅ Добавляем обработчик долгого нажатия
-        print("✅ TaskListView загружен, вызываем fetchTasks()")
-        setupSearchController()
-        setupTaskCountLabel()
-        presenter?.loadTasks()
+        setupLongPressGesture()
+        presenter?.viewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("📡 TaskListView: загружаем задачи после возврата") // ✅ Должно появиться в консоли
-        presenter?.loadTasks() // 🔥 Перезагружаем список при возврате
+        presenter?.fetchTasks()
     }
     
-    private func setupLongPressGesture() {
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-        tableView.addGestureRecognizer(longPressGesture)
-    }
-    
-    @objc private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
-        let point = gestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: point) else { return }
-        
-        if gestureRecognizer.state == .began {
-            let task = isSearching ? filteredTasks[indexPath.row] : tasks[indexPath.row]
-            showTaskOptions(for: task)
-        }
-    }
-    
-    private func showTaskOptions(for task: TaskEntity) {
-        let alert = UIAlertController(title: "Действия с задачей", message: nil, preferredStyle: .actionSheet)
-        
-        alert.addAction(UIAlertAction(title: "Редактировать", style: .default, handler: { _ in
-            self.openEditTaskScreen(task)
-        }))
-        
-        alert.addAction(UIAlertAction(title: "Поделиться", style: .default, handler: { _ in
-            self.shareTask(task)
-        }))
-        
-        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive, handler: { _ in
-            self.presenter?.deleteTask(task)
-        }))
-        
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        
-        present(alert, animated: true)
-    }
-    
-    func setupSearchController() {
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Поиск задач..."
-        navigationItem.searchController = searchController
-        definesPresentationContext = true
-    }
-    
-    func setupUI() {
+    // MARK: - Setup
+    private func setupUI() {
         view.backgroundColor = .white
         title = "To-Do List"
         
-        //navigationItem.rightBarButtonItem = editButtonItem // ✅ Добавляем кнопку редактирования
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toggleEditingMode)) // ✅ Добавляем кнопку Edit
-        
-        tableView.frame = CGRect(x: 0, y: 70, width: view.frame.size.width, height: view.frame.size.height - 180)
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        view.addSubview(tableView)
-        
-        setupAddButton() // ✅ Настраиваем кнопку
+        setupNavigationBar()
+        setupTaskCountLabel()
+        setupTableView()
+        setupAddButton()
     }
     
-    func setupAddButton() {
-        addButton.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
-        addButton.imageView?.contentMode = .scaleAspectFill
-        addButton.layer.cornerRadius = 25
-        addButton.clipsToBounds = true
-        addButton.addTarget(self, action: #selector(addTaskTapped), for: .touchUpInside)
-        
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(addButton)
+    private func setupNavigationBar() {
+        navigationItem.searchController = searchController
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Edit",
+            style: .plain,
+            target: self,
+            action: #selector(toggleEditingMode)
+        )
+        definesPresentationContext = true
+    }
+    
+    private func setupTableView() {
+        view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            addButton.widthAnchor.constraint(equalToConstant: 60),
-            addButton.heightAnchor.constraint(equalToConstant: 60)
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: taskCountLabel.topAnchor, constant: -8)
         ])
     }
     
     private func setupTaskCountLabel() {
-        taskCountLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(taskCountLabel)
         
         NSLayoutConstraint.activate([
             taskCountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             taskCountLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            taskCountLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30),
+            taskCountLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
             taskCountLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
-    @objc func addTaskTapped() {
+    private func setupAddButton() {
+        let addButton = UIBarButtonItem(
+            image: UIImage(systemName: "plus"),
+            style: .plain,
+            target: self,
+            action: #selector(addTaskTapped)
+        )
+        navigationItem.rightBarButtonItems = [navigationItem.rightBarButtonItem!, addButton]
+    }
+    
+    private func setupLongPressGesture() {
+        let longPressGesture = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(handleLongPress(_:))
+        )
+        tableView.addGestureRecognizer(longPressGesture)
+    }
+    
+    // MARK: - Actions
+    @objc private func addTaskTapped() {
         let addTaskVC = AddTaskRouter.createModule()
-        navigationController?.pushViewController(addTaskVC, animated: true) // ✅ Теперь переход в стек навигации
+        navigationController?.pushViewController(addTaskVC, animated: true)
     }
     
-    
-    // ✅ Добавляем метод для редактирования
-    @objc func toggleEditingMode() {
+    @objc private func toggleEditingMode() {
         tableView.setEditing(!tableView.isEditing, animated: true)
-        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "Done" : "Edit"
+        navigationItem.rightBarButtonItems?[0].title = tableView.isEditing ? "Done" : "Edit"
     }
     
-    func showTasks(_ tasks: [TaskEntity]) {
-        self.tasks = tasks
-        self.filteredTasks = tasks // ✅ Копируем, чтобы фильтрация работала
-        updateTaskCount()
-        print("✅ TaskListView: обновляем таблицу с \(tasks.count) задачами")
-        tableView.reloadData()
+    @objc private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == .began {
+            let point = gestureRecognizer.location(in: tableView)
+            if let indexPath = tableView.indexPathForRow(at: point) {
+                let task = isSearching ? filteredTasks[indexPath.row] : tasks[indexPath.row]
+                showTaskOptions(for: task)
+            }
+        }
     }
     
-    private func updateTaskCount() { // ✅ Обновляем текст
-        let taskCount = isSearching ? filteredTasks.count : tasks.count
-        taskCountLabel.text = "Задач: \(taskCount)"
+    // MARK: - Helper Methods
+    private func showTaskOptions(for task: TaskEntity) {
+        let alert = UIAlertController(title: "Действия с задачей", message: nil, preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Редактировать", style: .default) { [weak self] _ in
+            self?.openEditTaskScreen(task)
+        })
+        
+        alert.addAction(UIAlertAction(title: "Поделиться", style: .default) { [weak self] _ in
+            self?.shareTask(task)
+        })
+        
+        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+            self?.presenter?.deleteTask(task)
+        })
+        
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        
+        present(alert, animated: true)
     }
-    
     
     private func openEditTaskScreen(_ task: TaskEntity) {
-        let editVC = AddTaskRouter.createModule(editingTask: task) // ✅ Передаём задачу
-        let navController = UINavigationController(rootViewController: editVC)
-        present(navController, animated: true)
+        let editVC = AddTaskRouter.createModule(editingTask: task)
+        navigationController?.pushViewController(editVC, animated: true)
     }
     
     private func shareTask(_ task: TaskEntity) {
         let taskInfo = "👤 User \(task.userId)\n📌 \(task.todo)\n📅 \(formatDate(task.createdAt))"
         let activityVC = UIActivityViewController(activityItems: [taskInfo], applicationActivities: nil)
+        
+        if let popoverController = activityVC.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        
         present(activityVC, animated: true)
     }
     
@@ -183,83 +196,81 @@ class TaskListView: UIViewController, TaskListViewProtocol {
         return formatter.string(from: date)
     }
     
-}
-
-extension TaskListView: TaskCellDelegate {
-    func didToggleCompletion(for task: TaskEntity) {
-        presenter?.updateTask(task) // ✅ Обновляем в CoreData
+    private func updateTaskCount() {
+        let taskCount = isSearching ? filteredTasks.count : tasks.count
+        taskCountLabel.text = "Задач: \(taskCount)"
+    }
+    
+    // MARK: - TaskListViewProtocol
+    func showTasks(_ tasks: [TaskEntity]) {
+        self.tasks = tasks
+        self.filteredTasks = tasks
+        updateTaskCount()
+        tableView.reloadData()
     }
 }
 
+// MARK: - UITableViewDataSource
 extension TaskListView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("📊 Количество строк в таблице: \(tasks.count)")
         return isSearching ? filteredTasks.count : tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let task = isSearching ? filteredTasks[indexPath.row] : tasks[indexPath.row]
-        
-        // ✅ Добавляем debug print
-        print("📌 Настраиваем ячейку: \(task.todo), UserID: \(task.userId), Выполнено: \(task.completed)")
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TaskCell.identifier, for: indexPath) as? TaskCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: TaskCell.identifier,
+            for: indexPath
+        ) as? TaskCell else {
             return UITableViewCell()
         }
-        cell.configure(with: task, delegate: self) // ✅ Передаём делегат
+        
+        let task = isSearching ? filteredTasks[indexPath.row] : tasks[indexPath.row]
+        cell.configure(with: task, delegate: self)
         return cell
     }
 }
 
-// ✅ Делаем UITableViewDelegate, чтобы обрабатывать свайпы и выделение
+// MARK: - UITableViewDelegate
 extension TaskListView: UITableViewDelegate {
     
-    // ✅ Удаление задачи свайпом влево
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { [weak self] _, _, completionHandler in
-            guard let self = self else { return }
-            let task = self.tasks[indexPath.row]
-            self.presenter?.deleteTask(task) // 🔥 Удаляем через презентер
-            self.tasks.remove(at: indexPath.row) // Убираем из списка
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            completionHandler(true)
-        }
-        return UISwipeActionsConfiguration(actions: [deleteAction])
-    }
-    
-    // ✅ Выделение задачи (переключение статуса "выполнено/не выполнено")
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        var task = isSearching ? filteredTasks[indexPath.row] : tasks[indexPath.row]
-        
-        task.completed.toggle() // 🔥 Переключаем статус
-        
-        tasks[indexPath.row] = task // ✅ Обновляем массив
-        presenter?.updateTask(task) // ✅ Передаём в CoreData
-        
-        tableView.reloadRows(at: [indexPath], with: .automatic) // ✅ Обновляем UI
+        let task = isSearching ? filteredTasks[indexPath.row] : tasks[indexPath.row]
         let detailVC = TaskDetailViewController()
         detailVC.task = task
         navigationController?.pushViewController(detailVC, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let task = isSearching ? filteredTasks[indexPath.row] : tasks[indexPath.row]
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { [weak self] _, _, completion in
+            self?.presenter?.deleteTask(task)
+            completion(true)
+        }
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
 }
 
-// ✅ UISearchResultsUpdating
+// MARK: - UISearchResultsUpdating
 extension TaskListView: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text?.lowercased() else { return }
         
-        if searchText.isEmpty {
-            isSearching = false
-            filteredTasks = tasks
-        } else {
-            isSearching = true
-            filteredTasks = tasks.filter { $0.todo.lowercased().contains(searchText) }
-        }
+        isSearching = !searchText.isEmpty
+        filteredTasks = isSearching ? tasks.filter { $0.todo.lowercased().contains(searchText) } : tasks
         
         updateTaskCount()
         tableView.reloadData()
+    }
+}
+
+// MARK: - TaskCellDelegate
+extension TaskListView: TaskCellDelegate {
+    func didToggleCompletion(for task: TaskEntity) {
+        presenter?.toggleTaskCompletion(task)
     }
 }
