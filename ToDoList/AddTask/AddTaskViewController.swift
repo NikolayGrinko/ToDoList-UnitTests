@@ -45,7 +45,7 @@ class AddTaskViewController: UIViewController, AddTaskViewProtocol {
         }
     }
     
-    func setupUI() {
+    final func setupUI() {
         view.backgroundColor = .white
         title = editingTask == nil ? "Новая задача" : "Редактирование"
         navigationItem.title = "Добавить задачу"
@@ -73,19 +73,19 @@ class AddTaskViewController: UIViewController, AddTaskViewProtocol {
         )
     }
     
-    private func loadTaskData(_ task: TaskEntity) {
+    final private func loadTaskData(_ task: TaskEntity) {
         userIdTextField.text = "\(task.userId)"
         titleTextField.text = task.todo
         completedSwitch.isOn = task.completed
     }
     
-    func presentAddTaskScreen(from view: UIViewController) {
+    final func presentAddTaskScreen(from view: UIViewController) {
         let addTaskVC = AddTaskViewController()
         let navigationController = UINavigationController(rootViewController: addTaskVC)
         view.present(navigationController, animated: true, completion: nil) // ✅ Используем present
     }
     
-    @objc private func cancelTapped() {
+    @objc final private func cancelTapped() {
         if let navigationController = navigationController {
             if navigationController.viewControllers.count > 1 {
                 navigationController.popViewController(animated: true) // Закрываем через pop
@@ -97,7 +97,7 @@ class AddTaskViewController: UIViewController, AddTaskViewProtocol {
         }
     }
     
-    @objc func saveTapped() {
+    @objc final func saveTapped() {
         
         guard let title = titleTextField.text, !title.trimmingCharacters(in: .whitespaces).isEmpty,
               let userIdText = userIdTextField.text, let userId = Int(userIdText) else {
@@ -117,14 +117,14 @@ class AddTaskViewController: UIViewController, AddTaskViewProtocol {
         dismiss(animated: true, completion: nil) // ✅ Закрываем экран после успешного сохранения
     }
     
-    private func showAlert(title: String, message: String) {
+    final private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     
     
-    func dismissView() {
+    final func dismissView() {
         navigationController?.popViewController(animated: true) // ✅ Закрываем экран через стек навигации
         
     }
