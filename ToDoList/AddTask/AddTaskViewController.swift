@@ -11,11 +11,12 @@ protocol AddTaskViewProtocol: AnyObject {
     func dismissView()
 }
 
-class AddTaskViewController: UIViewController, AddTaskViewProtocol {
-    var presenter: AddTaskPresenterProtocol?
-    var editingTask: TaskEntity? // ✅ Для редактирования)
-    private let addButton = UIButton()
+final class AddTaskViewController: UIViewController, AddTaskViewProtocol {
+    // Properties
+    internal var presenter: AddTaskPresenterProtocol?
+    internal var editingTask: TaskEntity?
     
+    // UI Elements
     private let userIdTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .roundedRect
@@ -36,20 +37,30 @@ class AddTaskViewController: UIViewController, AddTaskViewProtocol {
         return switchControl
     }()
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         print("✅ AddTaskViewController открыт через \(presentingViewController != nil ? "present" : "push")")
         if let task = editingTask {
-            loadTaskData(task) // ✅ Заполняем поля, если редактируем задачу
+            loadTaskData(task)
         }
     }
     
-    final func setupUI() {
+    // MARK: - Setup
+    @inline(__always) private func setupUI() {
+        configureView()
+        setupStackView()
+        setupNavigationItems()
+    }
+    
+    @inline(__always) private func configureView() {
         view.backgroundColor = .white
         title = editingTask == nil ? "Новая задача" : "Редактирование"
         navigationItem.title = "Добавить задачу"
-        
+    }
+    
+    @inline(__always) private func setupStackView() {
         let stackView = UIStackView(arrangedSubviews: [
             userIdTextField,
             titleTextField,
@@ -66,42 +77,49 @@ class AddTaskViewController: UIViewController, AddTaskViewProtocol {
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelTapped)
+    }
+    
+    @inline(__always) private func setupNavigationItems() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "Cancel",
+            style: .plain,
+            target: self,
+            action: #selector(cancelTapped)
         )
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTapped)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .save,
+            target: self,
+            action: #selector(saveTapped)
         )
     }
     
-    final private func loadTaskData(_ task: TaskEntity) {
+    // MARK: - Data handling
+    @inline(__always) private func loadTaskData(_ task: TaskEntity) {
         userIdTextField.text = "\(task.userId)"
         titleTextField.text = task.todo
         completedSwitch.isOn = task.completed
     }
     
-    final func presentAddTaskScreen(from view: UIViewController) {
-        let addTaskVC = AddTaskViewController()
-        let navigationController = UINavigationController(rootViewController: addTaskVC)
-        view.present(navigationController, animated: true, completion: nil) // ✅ Используем present
-    }
-    
-    @objc final private func cancelTapped() {
+    // MARK: - Actions
+    @objc private func cancelTapped() {
         if let navigationController = navigationController {
             if navigationController.viewControllers.count > 1 {
-                navigationController.popViewController(animated: true) // Закрываем через pop
+                navigationController.popViewController(animated: true)
             } else {
-                navigationController.dismiss(animated: true, completion: nil) // Закрываем весь nav
+                navigationController.dismiss(animated: true)
             }
         } else {
-            dismiss(animated: true, completion: nil) // Закрываем обычный модальный экран
+            dismiss(animated: true)
         }
     }
     
-    @objc final func saveTapped() {
-        
-        guard let title = titleTextField.text, !title.trimmingCharacters(in: .whitespaces).isEmpty,
-              let userIdText = userIdTextField.text, let userId = Int(userIdText) else {
-            showAlert(title: "Ошибка", message: "Введите корректные данные!") // ✅ Показываем алерт
+    @objc private func saveTapped() {
+        guard let title = titleTextField.text?.trimmingCharacters(in: .whitespaces),
+              !title.isEmpty,
+              let userIdText = userIdTextField.text,
+              let userId = Int(userIdText) else {
+            showAlert(title: "Ошибка", message: "Введите корректные данные!")
             return
         }
         
@@ -110,22 +128,28 @@ class AddTaskViewController: UIViewController, AddTaskViewProtocol {
             todo: title,
             completed: completedSwitch.isOn,
             createdAt: editingTask?.createdAt ?? Date(),
-            userId: Int(userId)
+            userId: userId
         )
         
         presenter?.saveTask(task)
-        dismiss(animated: true, completion: nil) // ✅ Закрываем экран после успешного сохранения
+        dismiss(animated: true)
     }
     
-    final private func showAlert(title: String, message: String) {
+    // MARK: - Helpers
+    @inline(__always) private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
+        alert.addAction(UIAlertAction(title: "ОК", style: .default))
+        present(alert, animated: true)
     }
     
+    // MARK: - AddTaskViewProtocol
+    func dismissView() {
+        navigationController?.popViewController(animated: true)
+    }
     
-    final func dismissView() {
-        navigationController?.popViewController(animated: true) // ✅ Закрываем экран через стек навигации
-        
+    final func presentAddTaskScreen(from view: UIViewController) {
+        let addTaskVC = AddTaskViewController()
+        let navigationController = UINavigationController(rootViewController: addTaskVC)
+        view.present(navigationController, animated: true, completion: nil) // Используем present
     }
 }
